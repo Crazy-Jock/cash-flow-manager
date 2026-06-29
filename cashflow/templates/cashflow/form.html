@@ -1,51 +1,11 @@
-<h2>Фильтры</h2>
+<h2>Форма для добавления/редактирования записи</h2>
 
-<form method="get">
-  <input type="date" name="date_from" value="{{ filters.date_from|default:'' }}">
-  <input type="date" name="date_to" value="{{ filters.date_to|default:'' }}">
+<form method="post">
+  {% csrf_token %}
 
-  <select name="status">
-    <option value="">Status</option>
-    {% for s in status %}
-      <option value="{{ s.id }}"
-        {% if filters.status == s.id|stringformat:"s" %}selected{% endif %}>
-        {{ s.name }}
-      </option>
-    {% endfor %}
-  </select>
+  {{ form.as_p }}
 
-  <select id="type-select" name="type">
-    <option value="">Type</option>
-    {% for t in type %}
-      <option value="{{ t.id }}"
-        {% if filters.type == t.id|stringformat:"s" %}selected{% endif %}>
-        {{ t.name }}
-      </option>
-    {% endfor %}
-  </select>
-
-  <select id="category-select" name="category" {% if not filters.type %}disabled{% endif %}>
-    <option value="">Category</option>
-    {% for c in categories_for_select %}
-      <option value="{{ c.id }}"
-        {% if filters.category == c.id|stringformat:"s" %}selected{% endif %}>
-        {{ c.name }}
-      </option>
-    {% endfor %}
-  </select>
-
-  <select id="subcategory-select" name="subcategory" {% if not filters.category %}disabled{% endif %}>
-    <option value="">Subcategory</option>
-    {% for sc in subcategories_for_select %}
-      <option value="{{ sc.id }}"
-        {% if filters.subcategory == sc.id|stringformat:"s" %}selected{% endif %}>
-        {{ sc.name }}
-      </option>
-    {% endfor %}
-  </select>
-
-  <button type="submit">Применить</button>
-  <a href="/">Сбросить</a>
+  <button type="submit">Отправить</button>
 </form>
 
 <script>
@@ -143,32 +103,3 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 </script>
-
-<table>
-  <tr>
-    <th>Дата</th>
-    <th>Статус</th>
-    <th>Тип</th>
-    <th>Категория</th>
-    <th>Подкатегория</th>
-    <th>Кэш</th>
-    <th>Комментарий</th>
-  </tr>
-
-  {% for i in items %}
-  <tr>
-    <td>{{ i.created_at|date:"d.m.Y" }}</td>
-    <td>{{ i.status }}</td>
-    <td>{{ i.type }}</td>
-    <td>{{ i.category }}</td>
-    <td>{{ i.subcategory }}</td>
-    <td>{{ i.amount }}</td>
-    <td>{{ i.comment }}</td>
-    <td><a href="{% url 'cashflow_edit' i.id %}">Ред.</a></td>
-  </tr>
-  {% endfor %}
-</table>
-
-<a href="{% url 'cashflow_create' %}">
-  <button type="button">Создать запись</button>
-</a>

@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 
+from cashflow.forms import CashFlowForm
 from cashflow.models import Type, Status, Category, SubCategory, CashFlow
 
 
@@ -45,6 +46,7 @@ def cashflow_list(request):
         else SubCategory.objects.none()
     )
 
+    # рендер главной страницы без/с фильтрами
     return render(request, "cashflow/list.html", {"items": items,
                                                   "status": Status.objects.all(),
                                                   "type": Type.objects.all(),
@@ -76,3 +78,30 @@ def get_subcategories(request) -> JsonResponse:
     subcategories = SubCategory.objects.filter(category_id=selected_category).values("id", "name")
     
     return JsonResponse(list(subcategories), safe=False)
+
+# создание новой записи ДДС в БД
+def cashflow_create(request):
+    form = CashFlowForm(request.POST or None)
+
+    # если введенные данные валидные, то сохранить новую запись ДДС в БД и вернуть пользователя на главную страницу
+    if form.is_valid():
+        form.save()
+        return redirect("cashflow_list")
+    
+    # если введенные данные не валидные, то вернуть пользователя снова к заполнению формы
+    return render(request, "cashflow/form.html", {"form": form})
+
+
+# редактирование записи ДДС в БД
+def cashflow_edit(request, id):
+    # получаем запись ДДС из БД
+    item = CashFlow.objects.get(id=id)
+    form = CashFlowForm(request.POST or None, instance=item)
+
+    # если введенные данные валидные, то обновить существующую запись ДДС в БД
+    if form.is_valid():
+        form.save()
+        return redirect("cashflow_list")
+    
+    # если введенные данные не валидные, то вернуть пользователя снова к заполнению формы
+    return render(request, "cashflow/form.html", {"form": form})
