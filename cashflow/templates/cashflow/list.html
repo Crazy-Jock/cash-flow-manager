@@ -1,3 +1,149 @@
+<h2>Фильтры</h2>
+
+<form method="get">
+  <input type="date" name="date_from" value="{{ filters.date_from|default:'' }}">
+  <input type="date" name="date_to" value="{{ filters.date_to|default:'' }}">
+
+  <select name="status">
+    <option value="">Status</option>
+    {% for s in status %}
+      <option value="{{ s.id }}"
+        {% if filters.status == s.id|stringformat:"s" %}selected{% endif %}>
+        {{ s.name }}
+      </option>
+    {% endfor %}
+  </select>
+
+  <select id="type-select" name="type">
+    <option value="">Type</option>
+    {% for t in type %}
+      <option value="{{ t.id }}"
+        {% if filters.type == t.id|stringformat:"s" %}selected{% endif %}>
+        {{ t.name }}
+      </option>
+    {% endfor %}
+  </select>
+
+  <select id="category-select" name="category" {% if not filters.type %}disabled{% endif %}>
+    <option value="">Category</option>
+    {% for c in categories_for_select %}
+      <option value="{{ c.id }}"
+        {% if filters.category == c.id|stringformat:"s" %}selected{% endif %}>
+        {{ c.name }}
+      </option>
+    {% endfor %}
+  </select>
+
+  <select id="subcategory-select" name="subcategory" {% if not filters.category %}disabled{% endif %}>
+    <option value="">Subcategory</option>
+    {% for sc in subcategories_for_select %}
+      <option value="{{ sc.id }}"
+        {% if filters.subcategory == sc.id|stringformat:"s" %}selected{% endif %}>
+        {{ sc.name }}
+      </option>
+    {% endfor %}
+  </select>
+
+  <button type="submit">Применить</button>
+  <a href="/">Сбросить</a>
+</form>
+
+<script>
+const typeSelect = document.getElementById("type-select");
+const categorySelect = document.getElementById("category-select");
+const subcategorySelect = document.getElementById("subcategory-select");
+
+function renderOptions(select, items, placeholder) {
+    select.innerHTML = `<option value="">${placeholder}</option>`;
+    items.forEach(item => {
+        const option = document.createElement("option");
+        option.value = item.id;
+        option.textContent = item.name;
+        select.appendChild(option);
+    });
+}
+
+function loadCategories(typeId, selectedCategory = "") {
+    if (!typeId) {
+        categorySelect.disabled = true;
+        subcategorySelect.disabled = true;
+        renderOptions(categorySelect, [], "Category");
+        renderOptions(subcategorySelect, [], "Subcategory");
+        return;
+    }
+
+    categorySelect.disabled = true;
+    subcategorySelect.disabled = true;
+
+    fetch(`/ajax/categories/?type=${typeId}`)
+        .then(res => res.json())
+        .then(data => {
+            renderOptions(categorySelect, data, "Category");
+
+            if (selectedCategory) {
+                categorySelect.value = selectedCategory;
+            }
+
+            categorySelect.disabled = false;
+
+            if (selectedCategory) {
+                loadSubcategories(selectedCategory, "{{ filters.subcategory|default:'' }}");
+            } else {
+                renderOptions(subcategorySelect, [], "Subcategory");
+                subcategorySelect.disabled = true;
+            }
+        });
+}
+
+function loadSubcategories(categoryId, selectedSubcategory = "") {
+    if (!categoryId) {
+        renderOptions(subcategorySelect, [], "Subcategory");
+        subcategorySelect.disabled = true;
+        return;
+    }
+
+    subcategorySelect.disabled = true;
+
+    fetch(`/ajax/subcategories/?category=${categoryId}`)
+        .then(res => res.json())
+        .then(data => {
+            renderOptions(subcategorySelect, data, "Subcategory");
+
+            if (selectedSubcategory) {
+                subcategorySelect.value = selectedSubcategory;
+            }
+
+            subcategorySelect.disabled = false;
+        });
+}
+
+typeSelect.addEventListener("change", function () {
+    loadCategories(this.value);
+});
+
+categorySelect.addEventListener("change", function () {
+    loadSubcategories(this.value);
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const selectedType = "{{ filters.type|default:'' }}";
+    const selectedCategory = "{{ filters.category|default:'' }}";
+    const selectedSubcategory = "{{ filters.subcategory|default:'' }}";
+
+    if (selectedType) {
+        typeSelect.value = selectedType;
+        loadCategories(selectedType, selectedCategory);
+    } else {
+        categorySelect.disabled = true;
+        subcategorySelect.disabled = true;
+    }
+
+    if (selectedCategory && selectedSubcategory) {
+        subcategorySelect.value = selectedSubcategory;
+    }
+});
+</script>
+
 <table>
   <tr>
     <th>Дата</th>
@@ -6,16 +152,18 @@
     <th>Категория</th>
     <th>Подкатегория</th>
     <th>Кэш</th>
+    <th>Комментарий</th>
   </tr>
 
   {% for i in items %}
   <tr>
-    <td>{{ i.created_at }}</td>
+    <td>{{ i.created_at|date:"d.m.Y" }}</td>
     <td>{{ i.status }}</td>
     <td>{{ i.type }}</td>
     <td>{{ i.category }}</td>
     <td>{{ i.subcategory }}</td>
     <td>{{ i.amount }}</td>
+    <td>{{ i.comment }}</td>
   </tr>
   {% endfor %}
 </table>

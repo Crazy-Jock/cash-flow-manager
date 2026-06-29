@@ -1,14 +1,15 @@
 from django.db import models
+from django.utils import timezone
 
 
-class Type(models.Model):
+class Status(models.Model):
     name = models.CharField(max_length=127)
 
     # для удобного отображения в админке
     def __str__(self):
         return self.name
 
-class Status(models.Model):
+class Type(models.Model):
     name = models.CharField(max_length=127)
 
     # для удобного отображения в админке
@@ -32,7 +33,7 @@ class SubCategory(models.Model):
         return self.name
 
 class CashFlow(models.Model):
-    created_at = models.DateField(auto_now_add=True)
+    created_at = models.DateField(default=timezone.now)
     status = models.ForeignKey(Status, on_delete=models.PROTECT)
     type = models.ForeignKey(Type, on_delete=models.PROTECT)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
