@@ -1,0 +1,21 @@
+<table>
+  <tr>
+    <th>Дата</th>
+    <th>Статус</th>
+    <th>Тип</th>
+    <th>Категория</th>
+    <th>Подкатегория</th>
+    <th>Кэш</th>
+  </tr>
+
+  {% for i in items %}
+  <tr>
+    <td>{{ i.created_at }}</td>
+    <td>{{ i.status }}</td>
+    <td>{{ i.type }}</td>
+    <td>{{ i.category }}</td>
+    <td>{{ i.subcategory }}</td>
+    <td>{{ i.amount }}</td>
+  </tr>
+  {% endfor %}
+</table>
