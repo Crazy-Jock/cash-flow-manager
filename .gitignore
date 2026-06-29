@@ -1,0 +1,6 @@
+.env
+*.pyc
+**/__pycache__/
+__init__.py
+*_init.py
+Тестовое задание (backend-разработчик).pdf
