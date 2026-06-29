@@ -23,7 +23,7 @@ function renderOptions(select, items, placeholder) {
     });
 }
 
-function loadCategories(typeId, selectedCategory = "") {
+function loadCategories(typeId, selectedCategory = "", selectedSubcategory = "") {
     if (!typeId) {
         categorySelect.disabled = true;
         subcategorySelect.disabled = true;
@@ -47,7 +47,7 @@ function loadCategories(typeId, selectedCategory = "") {
             categorySelect.disabled = false;
 
             if (selectedCategory) {
-                loadSubcategories(selectedCategory, "{{ filters.subcategory|default:'' }}");
+                loadSubcategories(selectedCategory, selectedSubcategory);
             } else {
                 renderOptions(subcategorySelect, [], "Subcategory");
                 subcategorySelect.disabled = true;
@@ -86,20 +86,16 @@ categorySelect.addEventListener("change", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    const selectedType = "{{ filters.type|default:'' }}";
-    const selectedCategory = "{{ filters.category|default:'' }}";
-    const selectedSubcategory = "{{ filters.subcategory|default:'' }}";
+    const selectedType = typeSelect.value || "";
+    const selectedCategory = categorySelect.value || "";
+    const selectedSubcategory = subcategorySelect.value || "";
 
     if (selectedType) {
         typeSelect.value = selectedType;
-        loadCategories(selectedType, selectedCategory);
+        loadCategories(selectedType, selectedCategory, selectedSubcategory);
     } else {
         categorySelect.disabled = true;
         subcategorySelect.disabled = true;
-    }
-
-    if (selectedCategory && selectedSubcategory) {
-        subcategorySelect.value = selectedSubcategory;
     }
 });
 </script>

@@ -105,3 +105,9 @@ def cashflow_edit(request, id):
     
     # если введенные данные не валидные, то вернуть пользователя снова к заполнению формы
     return render(request, "cashflow/form.html", {"form": form})
+
+# удаление записи ДДС из БД
+def cashflow_delete(request, id):
+    CashFlow.objects.filter(id=id).delete()
+
+    return redirect("cashflow_list")

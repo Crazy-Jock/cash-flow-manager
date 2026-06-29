@@ -6,6 +6,13 @@ class CashFlowForm(forms.ModelForm):
     class Meta:
         model = CashFlow
         fields = "__all__"
+        
+        widgets = {
+            "type": forms.Select(attrs={"id": "type-select"}),
+            "category": forms.Select(attrs={"id": "category-select"}),
+            "subcategory": forms.Select(attrs={"id": "subcategory-select"}),
+        }
+        
         # для лучшего понимания
         labels = {
             "created_at": "Дата",
@@ -20,5 +27,5 @@ class CashFlowForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields["category"].queryset = Category.objects.none()
-        self.fields["subcategory"].queryset = SubCategory.objects.none()
+        self.fields["category"].queryset = Category.objects.all()
+        self.fields["subcategory"].queryset = SubCategory.objects.all()

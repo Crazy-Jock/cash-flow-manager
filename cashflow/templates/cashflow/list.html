@@ -165,6 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
     <td>{{ i.amount }}</td>
     <td>{{ i.comment }}</td>
     <td><a href="{% url 'cashflow_edit' i.id %}">Ред.</a></td>
+    <td><a href="{% url 'cashflow_delete' i.id %}">Удалить</a></td>
   </tr>
   {% endfor %}
 </table>
