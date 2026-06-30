@@ -10,16 +10,16 @@
     <tr>
         <td>{{ s.name }}</td>
         <td>
-            <a href="/">Ред.</a>
+            <a href="{% url 'edit_status' s.id %}">Ред.</a>
             |
-            <a href="/">Удалить</a>
+            <a href="{% url 'delete_status' s.id %}">Удалить</a>
         </td>
     </tr>
     {% endfor %}
 </table>
 
 <p>
-    <a href="/">
+    <a href="{% url 'create_status' %}">
         <button>Добавить статус</button>
     </a>
 </p>
@@ -36,16 +36,16 @@
     <tr>
         <td>{{ t.name }}</td>
         <td>
-            <a href="/">Ред.</a>
+            <a href="{% url 'edit_type' t.id %}">Ред.</a>
             |
-            <a href="/">Удалить</a>
+            <a href="{% url 'delete_type' t.id %}">Удалить</a>
         </td>
     </tr>
     {% endfor %}
 </table>
 
 <p>
-    <a href="/">
+    <a href="{% url 'create_type' %}">
         <button>Добавить тип</button>
     </a>
 </p>
@@ -62,16 +62,16 @@
     <tr>
         <td>{{ c.name }} &rarr; {{c.type}}</td>
         <td>
-            <a href="/">Ред.</a>
+            <a href="{% url 'edit_category' c.id %}">Ред.</a>
             |
-            <a href="/">Удалить</a>
+            <a href="{% url 'delete_category' c.id %}">Удалить</a>
         </td>
     </tr>
     {% endfor %}
 </table>
 
 <p>
-    <a href="/">
+    <a href="{% url 'create_category' %}">
         <button>Добавить категорию</button>
     </a>
 </p>
@@ -88,16 +88,19 @@
     <tr>
         <td>{{ s.name }} &rarr; {{s.category}}</td>
         <td>
-            <a href="/">Ред.</a>
+            <a href="{% url 'edit_subcategory' s.id %}">Ред.</a>
             |
-            <a href="/">Удалить</a>
+            <a href="{% url 'delete_subcategory' s.id %}">Удалить</a>
         </td>
     </tr>
     {% endfor %}
 </table>
 
 <p>
-    <a href="/">
+    <a href="{% url 'create_subcategory' %}">
         <button>Добавить подкатегорию</button>
     </a>
 </p>
+<a href="{% url 'cashflow_list' %}">
+    <button>Назад</button>
+</a>

@@ -153,6 +153,7 @@ document.addEventListener("DOMContentLoaded", function () {
     <th>Подкатегория</th>
     <th>Кэш</th>
     <th>Комментарий</th>
+    <th>Действия</th>
   </tr>
 
   {% for i in items %}
@@ -164,12 +165,19 @@ document.addEventListener("DOMContentLoaded", function () {
     <td>{{ i.subcategory }}</td>
     <td>{{ i.amount }}</td>
     <td>{{ i.comment }}</td>
-    <td><a href="{% url 'cashflow_edit' i.id %}">Ред.</a></td>
-    <td><a href="{% url 'cashflow_delete' i.id %}">Удалить</a></td>
+    <td>
+      <a href="{% url 'cashflow_edit' i.id %}">Ред.</a>
+      |
+      <a href="{% url 'cashflow_delete' i.id %}">Удалить</a>
+    </td>
   </tr>
   {% endfor %}
 </table>
 
 <a href="{% url 'cashflow_create' %}">
   <button type="button">Создать запись</button>
+</a>
+<br></br>
+<a href="{% url 'directory_list' %}">
+  <button type="button">Зайти в справочник</button>
 </a>
