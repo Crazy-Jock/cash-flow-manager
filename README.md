@@ -35,6 +35,11 @@
     - Проверяется соответствие категории к выбранному типу и подкатегории к выбранной категории
     - Проверяется положительность введенной суммы
 
+## Интерфейс
+<img width="1918" height="600" alt="Image" src="https://github.com/user-attachments/assets/fcd36c05-9f6d-4edf-badb-abf3df4fdf51" />
+<img width="1920" height="918" alt="Image" src="https://github.com/user-attachments/assets/93c1e01e-5c32-48d1-bb8c-88aa8f5a1c83" />
+<img width="1048" height="673" alt="Image" src="https://github.com/user-attachments/assets/f8421da2-bc77-4e2f-aaef-5f9cb229410d" />
+
 ## Архитектура приложения
 
 - `manage.py` - главный по запуску Django проекта
