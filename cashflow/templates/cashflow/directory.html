@@ -1,3 +1,12 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'cashflow/css/styles.css' %}">
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert">
+        {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
 <h2>Статусы</h2>
 
 <table>
@@ -104,11 +113,3 @@
 <a href="{% url 'cashflow_list' %}">
     <button>Назад</button>
 </a>
-
-{% if messages %}
-  {% for message in messages %}
-    <div class="alert">
-        {{ message }}
-    </div>
-  {% endfor %}
-{% endif %}
