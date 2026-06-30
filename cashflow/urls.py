@@ -11,4 +11,6 @@ urlpatterns = [
     path("create/", views.cashflow_create, name="cashflow_create"), # страница с формой для создания новой записи
     path("edit/<int:id>/", views.cashflow_edit, name="cashflow_edit"), # страница с формой для редактирования текущей записи
     path("delete/<int:id>/", views.cashflow_delete, name="cashflow_delete"), # для удаления записи ДДС из БД
+
+    path("directories/", views.directory_list, name="directory_list") # страница-справочник для создания/редактирования/удаления типов/категорий/подкатегорий
 ]

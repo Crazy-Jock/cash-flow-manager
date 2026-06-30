@@ -1,0 +1,103 @@
+<h2>Статусы</h2>
+
+<table>
+    <tr>
+        <th>Название</th>
+        <th>Действия</th>
+    </tr>
+
+    {% for s in status %}
+    <tr>
+        <td>{{ s.name }}</td>
+        <td>
+            <a href="/">Ред.</a>
+            |
+            <a href="/">Удалить</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<p>
+    <a href="/">
+        <button>Добавить статус</button>
+    </a>
+</p>
+
+<h2>Типы</h2>
+
+<table>
+    <tr>
+        <th>Название</th>
+        <th>Действия</th>
+    </tr>
+
+    {% for t in type %}
+    <tr>
+        <td>{{ t.name }}</td>
+        <td>
+            <a href="/">Ред.</a>
+            |
+            <a href="/">Удалить</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<p>
+    <a href="/">
+        <button>Добавить тип</button>
+    </a>
+</p>
+
+<h2>Категории</h2>
+
+<table>
+    <tr>
+        <th>Название</th>
+        <th>Действия</th>
+    </tr>
+
+    {% for c in category %}
+    <tr>
+        <td>{{ c.name }} &rarr; {{c.type}}</td>
+        <td>
+            <a href="/">Ред.</a>
+            |
+            <a href="/">Удалить</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<p>
+    <a href="/">
+        <button>Добавить категорию</button>
+    </a>
+</p>
+
+<h2>Подкатегории</h2>
+
+<table>
+    <tr>
+        <th>Название</th>
+        <th>Действия</th>
+    </tr>
+
+    {% for s in subcategory %}
+    <tr>
+        <td>{{ s.name }} &rarr; {{s.category}}</td>
+        <td>
+            <a href="/">Ред.</a>
+            |
+            <a href="/">Удалить</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<p>
+    <a href="/">
+        <button>Добавить подкатегорию</button>
+    </a>
+</p>

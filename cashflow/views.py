@@ -79,6 +79,7 @@ def get_subcategories(request) -> JsonResponse:
     
     return JsonResponse(list(subcategories), safe=False)
 
+
 # создание новой записи ДДС в БД
 def cashflow_create(request):
     form = CashFlowForm(request.POST or None)
@@ -90,7 +91,6 @@ def cashflow_create(request):
     
     # если введенные данные не валидные, то вернуть пользователя снова к заполнению формы
     return render(request, "cashflow/form.html", {"form": form})
-
 
 # редактирование записи ДДС в БД
 def cashflow_edit(request, id):
@@ -111,3 +111,25 @@ def cashflow_delete(request, id):
     CashFlow.objects.filter(id=id).delete()
 
     return redirect("cashflow_list")
+
+
+# создание таблицы-справочника со статусами, типами, категориями и подкатегориями
+def directory_list(request):
+    # рендер справочника со всеми статусами, типами, категориями и подкатегориями
+    return render(request, "cashflow/directory.html", {"status": Status.objects.all(),
+                                                       "type": Type.objects.all(),
+                                                       "category": Category.objects.all(),
+                                                       "subcategory": SubCategory.objects.all()})
+
+# создание нового статуса/типа/категории/подкатегории в БД
+def directory_create_object(request, form_object):
+    # получаем какую-либо форму с заполненными данными
+    form = form_object(request.POST or None)
+
+    # если введенные данные валидные, то сохранить новый статус/тип/категорию/подкатегорию и вернуть пользователя в справочник
+    if form.is_valid():
+        form.save()
+        return redirect("directories")
+    
+    # если введенные данные не валидные, то вернуть пользователя снова к заполнению формы
+    return render(request, "cashflow/form.html", {"form": form})
