@@ -12,6 +12,7 @@ class CashFlowForm(forms.ModelForm):
             "type": forms.Select(attrs={"id": "type-select"}),
             "category": forms.Select(attrs={"id": "category-select"}),
             "subcategory": forms.Select(attrs={"id": "subcategory-select"}),
+            "amount": forms.NumberInput(attrs={"min": "0"}) # чтобы пользователю нельзя было прописать сумму меньше 0
         }
         
         # для лучшего понимания понятные таблички
@@ -30,6 +31,31 @@ class CashFlowForm(forms.ModelForm):
 
         self.fields["category"].queryset = Category.objects.all()
         self.fields["subcategory"].queryset = SubCategory.objects.all()
+
+    # функция для валидации данных, чтобы проверить связи тип<-категория и категория<-подкатегория
+    def clean(self):
+        cleaned_data = super().clean()
+
+        # получаем данные после встроенной валидации django
+        type_ = cleaned_data.get("type")
+        category = cleaned_data.get("category")
+        subcategory = cleaned_data.get("subcategory")
+        amount = cleaned_data.get("amount")
+        
+        # проверка принадлежности выбранной категории к выбранному типу
+        if type_ and category:
+            if category.type != type_:
+                self.add_error("category", "Выбранная категория не принадлежить выбранному типу")
+        # проверка принадлежности выбранной пожкатегории к выбранной категории
+        if category and subcategory:
+            if subcategory.category != category:
+                self.add_error("subcategory", "Выбранная подкатегория не принадлежит выбранной категории")
+        # проверка на положительную сумму
+        if (amount is not None) and (amount < 0):
+            self.add_error("amount", "Кэш не может быть отрицательным")
+        
+        # возвращаем валидированные данные, после собственной проверки
+        return cleaned_data
 
 
 # форма для создания/редактирования статуса
