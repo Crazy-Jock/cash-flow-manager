@@ -1,7 +1,9 @@
 from django import forms
 from django.db import models
+from django.db.models.deletion import ProtectedError
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.contrib import messages as django_messages
 
 from cashflow.forms import CashFlowForm, CategoryForm, StatusForm, SubCategoryForm, TypeForm
 from cashflow.models import Type, Status, Category, SubCategory, CashFlow
@@ -49,7 +51,7 @@ def cashflow_list(request: HttpRequest) -> HttpResponse:
     )
 
     # рендер главной страницы без/с фильтрами
-    return render(request, "cashflow/list.html", {"items": items,
+    return render(request, "cashflow/list.html", {"items": items.order_by("created_at"),
                                                   "status": Status.objects.all(),
                                                   "type": Type.objects.all(),
                                                   "categories_for_select": categories_for_select,
@@ -118,10 +120,10 @@ def cashflow_delete(request: HttpRequest, id: int) -> HttpResponse:
 # создание таблицы-справочника со статусами, типами, категориями и подкатегориями
 def directory_list(request) -> HttpResponse:
     # рендер справочника со всеми статусами, типами, категориями и подкатегориями
-    return render(request, "cashflow/directory.html", {"status": Status.objects.all(),
-                                                       "type": Type.objects.all(),
-                                                       "category": Category.objects.all(),
-                                                       "subcategory": SubCategory.objects.all()})
+    return render(request, "cashflow/directory.html", {"status": Status.objects.all().order_by("name"),
+                                                       "type": Type.objects.all().order_by("name"),
+                                                       "category": Category.objects.all().order_by("name"),
+                                                       "subcategory": SubCategory.objects.all().order_by("name")})
 
 # универсальная функция для создания статуса/типа/категории/подкатегории в БД
 def directory_create_object(request: HttpRequest, form_object) -> HttpResponse:
@@ -158,7 +160,11 @@ def directory_delete_object(request: HttpRequest,
                             model_object: models.Model, 
                             id: int) -> HttpResponse:
     item = get_object_or_404(model_object, id=id) # вернуть 404 страницу, если объект не найден
-    item.delete()
+
+    try:
+        item.delete()
+    except ProtectedError:
+        django_messages.error(request, f"Нельзя удалить {item.name}. Есть связанные записи")
 
     return redirect("directory_list")
 

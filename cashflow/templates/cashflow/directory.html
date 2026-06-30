@@ -104,3 +104,11 @@
 <a href="{% url 'cashflow_list' %}">
     <button>Назад</button>
 </a>
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert">
+        {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
