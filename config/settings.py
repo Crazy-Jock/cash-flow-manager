@@ -70,8 +70,8 @@ DATABASES = {
         'NAME': env("NAME_DB"),
         'USER': env("USER_DB"),
         'PASSWORD': env("PASSWORD_DB"),
-        'HOST': "127.0.0.1",
-        'PORT': env("PORT_DB")
+        'HOST': "db",
+        'PORT': 5432
     }
 }
 
@@ -100,3 +100,4 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'

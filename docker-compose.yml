@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:16
+    container_name: cashflow_database
+    restart: always
+    environment:
+      POSTGRES_USER: ${USER_DB}
+      POSTGRES_PASSWORD: ${PASSWORD_DB}
+      POSTGRES_DB: ${NAME_DB}
+    ports:
+      - "${PORT_DB}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: .
+    container_name: cashflow_manager
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    environment:
+      USER_DB: ${USER_DB}
+      PASSWORD_DB: ${PASSWORD_DB}
+      NAME_DB: ${NAME_DB}
+      HOST_DB: db
+      PORT_DB: ${PORT_DB}
+    volumes:
+      - .:/app
+
+volumes:
+  postgres_data:

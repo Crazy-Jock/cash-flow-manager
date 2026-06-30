@@ -3,4 +3,5 @@
 **/__pycache__/
 __init__.py
 *_init.py
+staticfiles/admin
 Тестовое задание (backend-разработчик).pdf
