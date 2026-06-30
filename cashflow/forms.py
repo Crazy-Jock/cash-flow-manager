@@ -32,6 +32,7 @@ class CashFlowForm(forms.ModelForm):
         self.fields["subcategory"].queryset = SubCategory.objects.all()
 
 
+# форма для создания/редактирования статуса
 class StatusForm(forms.ModelForm):
     class Meta:
         model = Status
@@ -40,6 +41,7 @@ class StatusForm(forms.ModelForm):
         # для лучшего понимания понятная табличка
         label = {"name": "Статус"}
 
+# форма для создания/редактирования типа
 class TypeForm(forms.ModelForm):
     class Meta:
         model = Type
@@ -48,6 +50,7 @@ class TypeForm(forms.ModelForm):
         # для лучшего понимания понятная табличка
         label = {"name": "Тип"}
 
+# форма для создания/редактирования категории
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
@@ -59,6 +62,7 @@ class CategoryForm(forms.ModelForm):
             "name": "Категория",
         }
 
+# форма для создания/редактирования подкатегории
 class SubCategoryForm(forms.ModelForm):
     class Meta:
         model = SubCategory

@@ -161,6 +161,7 @@ def directory_delete_object(request: HttpRequest,
                             id: int) -> HttpResponse:
     item = get_object_or_404(model_object, id=id) # вернуть 404 страницу, если объект не найден
 
+    # защита от попытки удаления зависимых моделей в БД
     try:
         item.delete()
     except ProtectedError:
